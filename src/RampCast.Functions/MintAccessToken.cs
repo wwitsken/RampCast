@@ -9,6 +9,7 @@ namespace RampCast.Functions;
 
 public class MintAccessToken(ILogger<MintAccessToken> logger, AuthTokenStore store)
 {
+    // Defaults
     private const int DefaultUploadGrants = 25;
     private const int DefaultAnalysisGrants = 5;
     private const int MaxGrants = 1000;
