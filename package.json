@@ -1,0 +1,15 @@
+{
+  "name": "rampcast",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Dev-orchestration only — see src/RampCast.Functions and src/RampCast.SWA for the actual projects.",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n azurite,functions,swa -c red,blue,magenta \"npm:dev:azurite\" \"npm:dev:functions\" \"npm:dev:swa\"",
+    "dev:azurite": "node scripts/dev-azurite.js",
+    "dev:functions": "cd src/RampCast.Functions && dotnet run --port 7102",
+    "dev:swa": "cd src/RampCast.SWA && swa start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

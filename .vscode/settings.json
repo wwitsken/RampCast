@@ -1,0 +1,22 @@
+{
+  "azureFunctions.projectSubpath": "src\\RampCast.Functions",
+  "azureFunctions.deploySubpath": "src\\RampCast.Functions/bin/Release/net10.0/publish",
+  "azureFunctions.projectLanguage": "C#",
+  "azureFunctions.projectRuntime": "~4",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "publish (functions)",
+  "files.exclude": {
+    "**/.azurite": true,
+    "**/__azurite_db_*.json": true,
+    "**/__blobstorage__": true,
+    "**/__queuestorage__": true,
+    "**/__tablestorage__": true
+  },
+  "search.exclude": {
+    "**/.azurite": true,
+    "**/__azurite_db_*.json": true,
+    "**/__blobstorage__": true,
+    "**/__queuestorage__": true,
+    "**/__tablestorage__": true
+  }
+}

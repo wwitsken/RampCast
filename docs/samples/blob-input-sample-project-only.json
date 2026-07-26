@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "wbsCode": "R26.0002.00",
+      "name": "Downtown Parking Structure Feasibility",
+      "weekZeroStart": "2024-02-05",
+      "durationWeeks": 5,
+      "firstChargedWeek": 0,
+      "lastChargedWeek": 4,
+      "weeklyHours": [
+        { "weekIndex": 0, "role": "Civil Engineer", "hours": 12, "comments": ["Site grading review"] },
+        { "weekIndex": 0, "role": "Project Manager", "hours": 18, "comments": ["Kickoff and scope alignment", "Assembled comparable cost data"] },
+        { "weekIndex": 1, "role": "Project Manager", "hours": 22, "comments": ["Drafted feasibility narrative"] },
+        { "weekIndex": 4, "role": "Project Manager", "hours": 8, "comments": ["Final review with client"] }
+      ],
+      "phases": []
+    }
+  ]
+}

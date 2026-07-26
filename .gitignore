@@ -1,0 +1,51 @@
+# Build outputs
+[Bb]in/
+[Oo]bj/
+*.user
+
+# Visual Studio
+.vs/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Azure Functions
+local.settings.json
+bin/
+obj/
+
+# Azurite (local storage emulator) artifacts
+.azurite/
+__azurite_db_*.json
+__blobstorage__/
+__queuestorage__/
+__tablestorage__/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+
+# Node / npm (RampCast.SWA)
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Azure Static Web Apps CLI
+.swa/
+
+# OS cruft
+.DS_Store
+Thumbs.db

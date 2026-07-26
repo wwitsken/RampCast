@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rampcast/schemas/output-plan-schema.json",
+  "title": "RampCast staffing plan output",
+  "description": "The structured staffing plan produced by the staffing plan generation LLM call. Forced tool-use output for the generate_staffing_plan tool.",
+  "type": "object",
+  "required": ["planSummary", "totalDurationWeeks", "phases"],
+  "additionalProperties": false,
+  "properties": {
+    "planSummary": {
+      "type": "string",
+      "description": "A short narrative summarizing the overall ramp pattern and staffing shape, referencing the comparable projects it was drawn from."
+    },
+    "totalDurationWeeks": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The total duration of the whole project in weeks. This is the single, project-wide week axis every role's rampPattern is measured against — week 1 here is week 1 for every phase, task, and role, regardless of when each of them actually starts or ends."
+    },
+    "phases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/phase" }
+    }
+  },
+  "$defs": {
+    "role": {
+      "type": "object",
+      "required": ["roleName", "rampPattern", "totalHours", "rationale"],
+      "additionalProperties": false,
+      "properties": {
+        "roleName": {
+          "type": "string",
+          "description": "Role/title staffed on this phase or task, e.g. Project Architect."
+        },
+        "rampPattern": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 0 },
+          "description": "Week-by-week hours for this role across the entire project timeline. Always exactly totalDurationWeeks long (the shared project-wide week axis) — zero-padded for weeks the role is inactive: leading zeros if it starts later than project week 1, trailing zeros if it finishes before the project ends. Index 0 is project week 1. This lets two roles on different phases or tasks overlap, or run non-aligned spans, while still being comparable on one timeline."
+        },
+        "totalHours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Sum of the rampPattern hours for this role."
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Why this role is staffed this way, referencing the observed pattern in the comparable projects."
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": ["wbsCode", "name", "roles"],
+      "additionalProperties": false,
+      "properties": {
+        "wbsCode": {
+          "type": "string",
+          "description": "Task-level WBS code, e.g. CA or SO."
+        },
+        "name": { "type": "string" },
+        "roles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/role" }
+        }
+      }
+    },
+    "phase": {
+      "type": "object",
+      "required": ["wbsCode", "name", "roles", "tasks"],
+      "additionalProperties": false,
+      "properties": {
+        "wbsCode": {
+          "type": "string",
+          "description": "Phase-level WBS code, e.g. 01 or 02."
+        },
+        "name": { "type": "string" },
+        "roles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/role" },
+          "description": "Roles staffed directly at the phase level. Populated when the phase has no task breakdown; empty when work is broken into tasks."
+        },
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/task" }
+        }
+      }
+    }
+  }
+}

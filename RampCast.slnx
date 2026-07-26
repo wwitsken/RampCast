@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="src/RampCast.DocGen/RampCast.DocGen.csproj" />
+  <Project Path="src/RampCast.Functions/RampCast.Functions.csproj" Id="6d469a45-b260-4a91-8343-a3280e226d1e" />
+  <Project Path="tests/RampCast.Functions.Tests/RampCast.Functions.Tests.csproj" />
+</Solution>

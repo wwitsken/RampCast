@@ -1,0 +1,20 @@
+wbs1,wbs1_name,wbs2,wbs2_name,wbs3,wbs3_name,role,day,hours,comment
+R24.0089.00,Meadowbrook Apartments Phase 2,01,Schematic Design,,,Project Architect,2023-08-07,8,Unit mix study
+R24.0089.00,Meadowbrook Apartments Phase 2,01,Schematic Design,,,Project Architect,2023-08-14,8,Massing iteration 2
+R24.0089.00,Meadowbrook Apartments Phase 2,01,Schematic Design,,,Project Architect,2023-08-21,6,Zoning setback verification
+R24.0089.00,Meadowbrook Apartments Phase 2,01,Schematic Design,,,Designer I,2023-08-08,8,Unit plan diagrams
+R24.0089.00,Meadowbrook Apartments Phase 2,01,Schematic Design,,,Designer I,2023-08-15,6,Elevation studies
+R24.0089.00,Meadowbrook Apartments Phase 2,02,Design Development,,,Project Architect,2023-10-02,8,DD unit plans coordination
+R24.0089.00,Meadowbrook Apartments Phase 2,02,Design Development,,,Project Architect,2023-10-09,8,Amenity space layout
+R24.0089.00,Meadowbrook Apartments Phase 2,02,Design Development,,,Structural Engineer,2023-10-03,8,Preliminary framing scheme
+R24.0089.00,Meadowbrook Apartments Phase 2,02,Design Development,,,Structural Engineer,2023-10-10,6,Lateral system options
+R24.0089.00,Meadowbrook Apartments Phase 2,03,Construction Documents,,,Project Architect,2023-12-04,8,CD building sections
+R24.0089.00,Meadowbrook Apartments Phase 2,03,Construction Documents,,,Project Architect,2023-12-11,8,Spec coordination with envelope consultant
+R24.0089.00,Meadowbrook Apartments Phase 2,03,Construction Documents,,,Project Engineer,2023-12-05,8,MEP riser diagrams
+R24.0089.00,Meadowbrook Apartments Phase 2,03,Construction Documents,,,Structural Engineer,2023-12-06,8,Foundation plan finalization
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,CA,Contract Administration,Project Architect,2024-04-08,8,Submittal log - curtain wall
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,CA,Contract Administration,Project Architect,2024-04-15,6,RFI - balcony waterproofing
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,CA,Contract Administration,Project Engineer,2024-04-09,6,MEP submittal review
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,SO,Site Observation,Field Observer,2024-04-10,6,Podium slab pour observation
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,SO,Site Observation,Field Observer,2024-04-17,6,Framing progress - building B
+R24.0089.00,Meadowbrook Apartments Phase 2,04,Construction Management,SO,Site Observation,Field Observer,2024-04-24,6,Waterproofing inspection

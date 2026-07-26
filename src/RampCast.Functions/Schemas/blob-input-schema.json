@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rampcast/schemas/blob-input-schema.json",
+  "title": "RampCast staffing plan input",
+  "description": "Historical timesheet data for a set of comparable past projects, aggregated to the WBS project/phase/task level. Each project carries its own relative week axis: week 0 is the first week that project had any hours charged to it. Input to the staffing plan generation LLM call.",
+  "type": "object",
+  "required": ["projects"],
+  "additionalProperties": false,
+  "properties": {
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/project" },
+      "description": "One entry per distinct wbs1 code across all uploaded exports. A single export may contain several projects, and several exports may contribute rows to the same project."
+    }
+  },
+  "$defs": {
+    "project": {
+      "type": "object",
+      "required": [
+        "wbsCode",
+        "name",
+        "weekZeroStart",
+        "durationWeeks",
+        "firstChargedWeek",
+        "lastChargedWeek",
+        "weeklyHours",
+        "phases"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "wbsCode": {
+          "type": "string",
+          "description": "Top-level project WBS code, e.g. R26.0001.00"
+        },
+        "name": { "type": "string" },
+        "weekZeroStart": {
+          "type": "string",
+          "format": "date",
+          "description": "Calendar Monday of this project's week 0. For human traceability and to indicate roughly when the project ran. Do NOT use it to align this project against another — all cross-project comparison uses the relative week indices."
+        },
+        "durationWeeks": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "First charged week through last, inclusive (lastChargedWeek + 1). Dormant weeks in between are still counted, so the ramp keeps its real gaps."
+        },
+        "firstChargedWeek": {
+          "type": "integer",
+          "const": 0,
+          "description": "Always 0 — each project defines its own week axis from its own first charged week."
+        },
+        "lastChargedWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0-based index of the last week this project had any hours charged."
+        },
+        "weeklyHours": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/weeklyHourEntry" },
+          "description": "Hours charged directly at the project level, with no WBS phase assigned — e.g. pursuit/business-development hours logged before the project had a phase breakdown set up. Unlike phase vs. task (a strict either/or: once a phase has tasks, all of its hours live under them), unphased project-level hours can coexist alongside phases — a project commonly has some pre-award hours here and its post-award work broken into phases below."
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/$defs/phase" }
+        }
+      }
+    },
+    "phase": {
+      "type": "object",
+      "required": [
+        "wbsCode",
+        "name",
+        "firstChargedWeek",
+        "lastChargedWeek",
+        "weeklyHours",
+        "tasks"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "wbsCode": {
+          "type": "string",
+          "description": "Phase-level WBS code, e.g. 01 or 02"
+        },
+        "name": { "type": "string" },
+        "firstChargedWeek": { "$ref": "#/$defs/chargedWeek" },
+        "lastChargedWeek": { "$ref": "#/$defs/chargedWeek" },
+        "weeklyHours": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/weeklyHourEntry" },
+          "description": "Populated only when tasks is empty — leaf-level hours live wherever the WBS bottoms out."
+        },
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/task" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "tasks": { "minItems": 1 } },
+            "required": ["tasks"]
+          },
+          "then": {
+            "properties": { "weeklyHours": { "maxItems": 0 } }
+          }
+        }
+      ]
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "wbsCode",
+        "name",
+        "firstChargedWeek",
+        "lastChargedWeek",
+        "weeklyHours"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "wbsCode": {
+          "type": "string",
+          "description": "Task-level WBS code, e.g. CA or SO"
+        },
+        "name": { "type": "string" },
+        "firstChargedWeek": { "$ref": "#/$defs/chargedWeek" },
+        "lastChargedWeek": { "$ref": "#/$defs/chargedWeek" },
+        "weeklyHours": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/weeklyHourEntry" }
+        }
+      }
+    },
+    "chargedWeek": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "0-based index on the parent project's week axis. OBSERVED charge activity — when hours actually landed — not a planned schedule date."
+    },
+    "weeklyHourEntry": {
+      "type": "object",
+      "required": ["weekIndex", "role", "hours"],
+      "additionalProperties": false,
+      "properties": {
+        "weekIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "0-based week offset from the parent project's week 0 (the Monday of the first week that project had any hours charged). Entries are SPARSE: a week/role combination that is absent means zero hours for that week, not missing or unknown data."
+        },
+        "role": { "type": "string" },
+        "hours": {
+          "type": "number",
+          "minimum": 0
+        },
+        "comments": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        }
+      }
+    }
+  }
+}

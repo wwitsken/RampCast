@@ -1,0 +1,50 @@
+{
+  "planSummary": "Ramp pattern follows the Acme SD phase closely for design-heavy roles; Site Observation staffing starts two weeks into Construction Management, once the contractor mobilizes on site.",
+  "totalDurationWeeks": 12,
+  "phases": [
+    {
+      "wbsCode": "01",
+      "name": "Schematic Design",
+      "roles": [
+        {
+          "roleName": "Project Architect",
+          "rampPattern": [32, 40, 40, 38, 35, 30, 20, 0, 0, 0, 0, 0],
+          "totalHours": 235,
+          "rationale": "Mirrors the Acme SD phase's front-loaded pattern — heavier early weeks for site analysis and concept massing, tapering as design converges. Winds down entirely by week 8 as SD wraps."
+        }
+      ],
+      "tasks": []
+    },
+    {
+      "wbsCode": "02",
+      "name": "Construction Management",
+      "roles": [],
+      "tasks": [
+        {
+          "wbsCode": "01",
+          "name": "Contract Administration",
+          "roles": [
+            {
+              "roleName": "Project Architect",
+              "rampPattern": [16, 16, 20, 20, 20, 18, 18, 16, 16, 12, 12, 8],
+              "totalHours": 192,
+              "rationale": "Steady mid-level involvement across the full CM duration, lighter than Globex's comparable CA phase since this contract has fewer RFI-heavy trades."
+            }
+          ]
+        },
+        {
+          "wbsCode": "02",
+          "name": "Site Observation",
+          "roles": [
+            {
+              "roleName": "Field Observer",
+              "rampPattern": [0, 0, 0, 8, 12, 16, 16, 16, 12, 12, 8, 4],
+              "totalHours": 104,
+              "rationale": "Doesn't start until week 4 — two weeks after CM kicks off, once the contractor mobilizes on site. Peaks mid-construction matching typical inspection cadence seen across all three comparable projects."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

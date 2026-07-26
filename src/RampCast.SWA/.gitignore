@@ -1,0 +1,5 @@
+# Editor directories and files
+# (node_modules, dist, .env, and log patterns are covered by the root .gitignore)
+.vscode/*
+!.vscode/extensions.json
+.idea

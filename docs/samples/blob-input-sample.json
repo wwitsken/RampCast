@@ -1,0 +1,110 @@
+{
+  "projects": [
+    {
+      "wbsCode": "R26.0001.00",
+      "name": "Riverside Medical Center",
+      "weekZeroStart": "2024-01-15",
+      "durationWeeks": 6,
+      "firstChargedWeek": 0,
+      "lastChargedWeek": 5,
+      "weeklyHours": [],
+      "phases": [
+        {
+          "wbsCode": "01",
+          "name": "Schematic Design",
+          "firstChargedWeek": 0,
+          "lastChargedWeek": 1,
+          "weeklyHours": [
+            { "weekIndex": 1, "role": "Designer I", "hours": 6, "comments": ["Prepared study model"] },
+            { "weekIndex": 0, "role": "Project Architect", "hours": 24, "comments": ["Initial site analysis", "Client kickoff prep, agenda drafted", "Zoning review"] },
+            { "weekIndex": 1, "role": "Project Architect", "hours": 16, "comments": ["Concept massing studies", "Concept massing studies continued"] }
+          ],
+          "tasks": []
+        },
+        {
+          "wbsCode": "02",
+          "name": "Construction Management",
+          "firstChargedWeek": 3,
+          "lastChargedWeek": 5,
+          "weeklyHours": [],
+          "tasks": [
+            {
+              "wbsCode": "CA",
+              "name": "Contract Administration",
+              "firstChargedWeek": 3,
+              "lastChargedWeek": 4,
+              "weeklyHours": [
+                { "weekIndex": 3, "role": "Project Architect", "hours": 16, "comments": ["RFI log setup", "Reviewed submittals, flagged two"] },
+                { "weekIndex": 4, "role": "Project Architect", "hours": 8, "comments": ["Processed RFIs"] }
+              ]
+            },
+            {
+              "wbsCode": "SO",
+              "name": "Site Observation",
+              "firstChargedWeek": 3,
+              "lastChargedWeek": 5,
+              "weeklyHours": [
+                { "weekIndex": 3, "role": "Field Observer", "hours": 4, "comments": ["Foundation inspection"] },
+                { "weekIndex": 4, "role": "Field Observer", "hours": 6, "comments": ["Framing progress walk"] },
+                { "weekIndex": 5, "role": "Field Observer", "hours": 6, "comments": ["Mid-construction inspection"] }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "wbsCode": "R26.0002.00",
+      "name": "Cascade Elementary School Addition",
+      "weekZeroStart": "2024-03-04",
+      "durationWeeks": 17,
+      "firstChargedWeek": 0,
+      "lastChargedWeek": 16,
+      "weeklyHours": [],
+      "phases": [
+        {
+          "wbsCode": "01",
+          "name": "Schematic Design",
+          "firstChargedWeek": 0,
+          "lastChargedWeek": 1,
+          "weeklyHours": [
+            { "weekIndex": 1, "role": "Designer I", "hours": 12, "comments": ["Built SketchUp massing model", "Refined massing per PA comments"] },
+            { "weekIndex": 0, "role": "Project Architect", "hours": 16, "comments": ["Program verification with district", "Site visit and existing conditions survey"] },
+            { "weekIndex": 1, "role": "Project Architect", "hours": 14, "comments": ["Massing study round 1", "Coordinated with structural on options"] }
+          ],
+          "tasks": []
+        },
+        {
+          "wbsCode": "02",
+          "name": "Construction Management",
+          "firstChargedWeek": 14,
+          "lastChargedWeek": 16,
+          "weeklyHours": [],
+          "tasks": [
+            {
+              "wbsCode": "CA",
+              "name": "Contract Administration",
+              "firstChargedWeek": 14,
+              "lastChargedWeek": 15,
+              "weeklyHours": [
+                { "weekIndex": 14, "role": "Project Architect", "hours": 16, "comments": ["Reviewed steel submittal", "RFI response - roof drain detail"] },
+                { "weekIndex": 15, "role": "Project Architect", "hours": 6, "comments": ["Change order review"] }
+              ]
+            },
+            {
+              "wbsCode": "SO",
+              "name": "Site Observation",
+              "firstChargedWeek": 14,
+              "lastChargedWeek": 16,
+              "weeklyHours": [
+                { "weekIndex": 14, "role": "Field Observer", "hours": 4, "comments": ["Rebar inspection prior to pour"] },
+                { "weekIndex": 15, "role": "Field Observer", "hours": 6, "comments": ["Structural steel erection observation"] },
+                { "weekIndex": 16, "role": "Field Observer", "hours": 6, "comments": ["Progress photos and punch prep"] }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
