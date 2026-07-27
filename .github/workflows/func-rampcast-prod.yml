@@ -50,9 +50,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        client-id: ${{ vars.func_rampcast_prod_CLIENT_ID_FA86 }}
-        tenant-id: ${{ vars.func_rampcast_prod_TENANT_ID_FA86 }}
-        subscription-id: ${{ vars.func_rampcast_prod_SUBSCRIPTION_ID_FA86 }}
+        client-id: ${{ secrets.func_rampcast_prod_CLIENT_ID }}
+        tenant-id: ${{ secrets.func_rampcast_prod_TENANT_ID }}
+        subscription-id: ${{ secrets.func_rampcast_prod_SUBSCRIPTION_ID }}
     - name: Deploy to Azure Function App
       uses: Azure/functions-action@v1
       with:
