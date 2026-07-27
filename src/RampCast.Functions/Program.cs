@@ -6,7 +6,6 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RampCast.DocGen;
 using RampCast.Functions.Services;
 
 var builder = FunctionsApplication.CreateBuilder(args);
