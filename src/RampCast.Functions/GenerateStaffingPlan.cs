@@ -32,7 +32,7 @@ public class GenerateStaffingPlan(
 
     [Function(nameof(GenerateStaffingPlan))]
     public async Task Run(
-        [QueueTrigger("batch-analysis", Connection = "")] QueueMessage message,
+        [QueueTrigger("batch-analysis", Connection = "AzureQueueStorage")] QueueMessage message,
         CancellationToken cancellationToken)
     {
         // The queue trigger auto-decodes the base64 AnalyzeBatch applied, so
