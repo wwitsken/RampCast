@@ -1,4 +1,5 @@
 using Anthropic;
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Azure.Functions.Worker.OpenTelemetry;
@@ -14,9 +15,16 @@ builder.ConfigureFunctionsWebApplication();
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    clientBuilder.AddBlobServiceClient(builder.Configuration.GetValue<string>("AzureWebJobsStorage"));
-    clientBuilder.AddQueueServiceClient(builder.Configuration.GetValue<string>("AzureWebJobsStorage"));
-    clientBuilder.AddTableServiceClient(builder.Configuration.GetValue<string>("AzureWebJobsStorage"));
+    clientBuilder.AddBlobServiceClient(builder.Configuration.GetValue<string>("AzureBlobUri"));
+    clientBuilder.AddQueueServiceClient(builder.Configuration.GetValue<string>("AzureQueueUri"));
+    clientBuilder.AddTableServiceClient(builder.Configuration.GetValue<string>("AzureTableUri"));
+
+    if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
+    {
+        // Managed identity token credential discovered when running in Azure environments
+        ManagedIdentityCredential credential = new(ManagedIdentityId.SystemAssigned);
+        clientBuilder.UseCredential(credential);
+    }
 });
 
 // Anthropic client — registered once and constructor-injected, mirroring the
