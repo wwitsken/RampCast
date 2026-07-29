@@ -32,7 +32,14 @@ public class GenerateStaffingPlan(
 
     [Function(nameof(GenerateStaffingPlan))]
     public async Task Run(
-        [QueueTrigger("batch-analysis", Connection = "Storage")] QueueMessage message,
+        // Deliberately a distinct connection name from the app's own "Storage"
+        // options section (used by AddAzureClients in Program.cs) rather than
+        // reusing "Storage" for this too: reusing it — a flat connection-string
+        // value coexisting with Storage__blobServiceUri/etc. under the same
+        // name — silently broke the trigger in production (listener registered,
+        // nothing ever dispatched, no error anywhere). This exact shape
+        // (identity-only, its own name) is the one confirmed working.
+        [QueueTrigger("batch-analysis", Connection = "AzureQueueStorage")] QueueMessage message,
         CancellationToken cancellationToken)
     {
         // The queue trigger auto-decodes the base64 AnalyzeBatch applied, so
