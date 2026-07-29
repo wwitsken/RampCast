@@ -7,6 +7,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using RampCast.Functions;
 using RampCast.Functions.Services;
 
@@ -14,42 +15,40 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
+builder.Services.AddSingleton<IValidateOptions<StorageOptions>, StorageOptionsValidator>();
+builder.Services
+    .AddOptions<StorageOptions>()
+    .Bind(builder.Configuration.GetSection(StorageOptions.SectionName))
+    .ValidateOnStart();
+
+// Resolved eagerly rather than via DI: AddAzureClients below needs the value
+// before the container is built. ValidateOnStart above still guards anyone who
+// injects IOptions<StorageOptions> later, and is the reason this check can't
+// just be skipped in favor of that — a container that fails to build here would
+// otherwise throw from deep inside AddBlobServiceClient with the same kind of
+// unhelpful stack trace this whole options setup exists to avoid.
+var storageOptions = builder.Configuration.GetSection(StorageOptions.SectionName).Get<StorageOptions>()
+    ?? new StorageOptions();
+var storageValidation = new StorageOptionsValidator().Validate(null, storageOptions);
+if (storageValidation.Failed)
+    throw new InvalidOperationException(storageValidation.FailureMessage);
+
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    string?[] identityUris =
-    [
-        builder.Configuration.GetValue<string>("AzureBlobUri"),
-        builder.Configuration.GetValue<string>("AzureQueueUri"),
-        builder.Configuration.GetValue<string>("AzureTableUri"),
-    ];
-    var identityUriCount = identityUris.Count(uri => !string.IsNullOrEmpty(uri));
-
-    if (identityUriCount == identityUris.Length)
+    if (storageOptions.ConnectionString is { } connectionString)
     {
-        // Prefer managed identity: Azure*Uri settings present means these are real
-        // service endpoints, not connection strings, so the Uri overload must be used
-        // for UseCredential to actually apply — the string overload binds to the
-        // connection-string constructor instead and ignores any registered credential.
-        clientBuilder.AddBlobServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureBlobUri")));
-        clientBuilder.AddQueueServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureQueueUri")));
-        clientBuilder.AddTableServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureTableUri")));
-        clientBuilder.UseCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned));
-    }
-    else if (identityUriCount == 0)
-    {
-        // Fall back to a connection string (local dev via Azurite, or any environment
-        // without the identity URIs configured).
-        var connectionString = builder.Configuration.GetRequiredValue("AzureWebJobsStorage");
         clientBuilder.AddBlobServiceClient(connectionString);
         clientBuilder.AddQueueServiceClient(connectionString);
         clientBuilder.AddTableServiceClient(connectionString);
     }
     else
     {
-        throw new InvalidOperationException(
-            "Partial Azure storage identity configuration: AzureBlobUri, AzureQueueUri, and AzureTableUri " +
-            "must all be set together to use managed identity, or all left unset to fall back to the " +
-            "AzureWebJobsStorage connection string.");
+        // The Uri overload is required (not the connection-string one) for
+        // UseCredential below to actually apply to these clients.
+        clientBuilder.AddBlobServiceClient(storageOptions.BlobServiceUri);
+        clientBuilder.AddQueueServiceClient(storageOptions.QueueServiceUri);
+        clientBuilder.AddTableServiceClient(storageOptions.TableServiceUri);
+        clientBuilder.UseCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned));
     }
 });
 
