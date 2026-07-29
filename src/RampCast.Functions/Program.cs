@@ -7,6 +7,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RampCast.Functions;
 using RampCast.Functions.Services;
 
 var builder = FunctionsApplication.CreateBuilder(args);
@@ -15,15 +16,40 @@ builder.ConfigureFunctionsWebApplication();
 
 builder.Services.AddAzureClients(clientBuilder =>
 {
-    clientBuilder.AddBlobServiceClient(builder.Configuration.GetValue<string>("AzureBlobUri"));
-    clientBuilder.AddQueueServiceClient(builder.Configuration.GetValue<string>("AzureQueueUri"));
-    clientBuilder.AddTableServiceClient(builder.Configuration.GetValue<string>("AzureTableUri"));
+    string?[] identityUris =
+    [
+        builder.Configuration.GetValue<string>("AzureBlobUri"),
+        builder.Configuration.GetValue<string>("AzureQueueUri"),
+        builder.Configuration.GetValue<string>("AzureTableUri"),
+    ];
+    var identityUriCount = identityUris.Count(uri => !string.IsNullOrEmpty(uri));
 
-    if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
+    if (identityUriCount == identityUris.Length)
     {
-        // Managed identity token credential discovered when running in Azure environments
-        ManagedIdentityCredential credential = new(ManagedIdentityId.SystemAssigned);
-        clientBuilder.UseCredential(credential);
+        // Prefer managed identity: Azure*Uri settings present means these are real
+        // service endpoints, not connection strings, so the Uri overload must be used
+        // for UseCredential to actually apply — the string overload binds to the
+        // connection-string constructor instead and ignores any registered credential.
+        clientBuilder.AddBlobServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureBlobUri")));
+        clientBuilder.AddQueueServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureQueueUri")));
+        clientBuilder.AddTableServiceClient(new Uri(builder.Configuration.GetRequiredValue("AzureTableUri")));
+        clientBuilder.UseCredential(new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned));
+    }
+    else if (identityUriCount == 0)
+    {
+        // Fall back to a connection string (local dev via Azurite, or any environment
+        // without the identity URIs configured).
+        var connectionString = builder.Configuration.GetRequiredValue("AzureWebJobsStorage");
+        clientBuilder.AddBlobServiceClient(connectionString);
+        clientBuilder.AddQueueServiceClient(connectionString);
+        clientBuilder.AddTableServiceClient(connectionString);
+    }
+    else
+    {
+        throw new InvalidOperationException(
+            "Partial Azure storage identity configuration: AzureBlobUri, AzureQueueUri, and AzureTableUri " +
+            "must all be set together to use managed identity, or all left unset to fall back to the " +
+            "AzureWebJobsStorage connection string.");
     }
 });
 
